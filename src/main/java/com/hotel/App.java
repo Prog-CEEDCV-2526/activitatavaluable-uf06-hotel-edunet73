@@ -139,8 +139,8 @@ public class App {
      */
     public static void reservarHabitacio() {
         System.out.println("\n===== RESERVAR HABITACIÓ =====");
-        //TODO:
-        
+        String tipus = seleccionarTipusHabitacioDisponible();
+
     }
 
     /**
@@ -148,8 +148,20 @@ public class App {
      * retorna el nom del tipus.
      */
     public static String seleccionarTipusHabitacio() {
-        //TODO:
-        return null;
+        System.out.println();
+        System.out.print("Seleccione tipus d'habitació: ");
+        int numero = sc.nextInt();
+        switch (numero) {
+            case 1:
+                return TIPUS_SUITE;
+            case 2:
+                return TIPUS_ESTANDARD;
+            case 3:
+                return TIPUS_DELUXE;
+            default:
+                System.out.println("Error: opció no vàlida!!!");
+                return null;
+        }
     }
 
     /**
@@ -159,8 +171,26 @@ public class App {
      */
     public static String seleccionarTipusHabitacioDisponible() {
         System.out.println("\nTipus d'habitació disponibles:");
-        //TODO:
-        return null;
+        System.out.println();
+        // mostrar disponibilitat
+        int contador = 1;
+        for (String tipus : disponibilitatHabitacions.keySet()) {
+            int disponibles = disponibilitatHabitacions.get(tipus);
+            float preu = preusHabitacions.get(tipus);
+            System.out.println("   " + contador + ". " + tipus + " - " + disponibles + " disponibles - " + preu + "€");
+            contador ++;
+        }
+        // demanar tipus d'habitació
+        String tipus;
+        do {
+            tipus = seleccionarTipusHabitacio();
+        } while (tipus == null);
+        // retornar sols si queden disponibles
+        if (disponibilitatHabitacions.get(tipus) > 0) {
+            return tipus;
+        } else {
+            return null;
+        }
     }
 
     /**
