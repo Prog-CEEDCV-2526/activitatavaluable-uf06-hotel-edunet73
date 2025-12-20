@@ -140,6 +140,8 @@ public class App {
     public static void reservarHabitacio() {
         System.out.println("\n===== RESERVAR HABITACIÓ =====");
         String tipus = seleccionarTipusHabitacioDisponible();
+        ArrayList<String> serveis = seleccionarServeis();
+
 
     }
 
@@ -171,7 +173,6 @@ public class App {
      */
     public static String seleccionarTipusHabitacioDisponible() {
         System.out.println("\nTipus d'habitació disponibles:");
-        System.out.println();
         // mostrar disponibilitat
         int contador = 1;
         for (String tipus : disponibilitatHabitacions.keySet()) {
@@ -181,7 +182,7 @@ public class App {
             contador ++;
         }
         // demanar tipus d'habitació
-        String tipus;
+        String tipus = "";
         do {
             tipus = seleccionarTipusHabitacio();
         } while (tipus == null);
@@ -198,9 +199,56 @@ public class App {
      * els retorna en un ArrayList de String.
      */
     public static ArrayList<String> seleccionarServeis() {
-        //TODO:
-
-        return null;
+        ArrayList<String> serveis = new ArrayList<>();
+        System.out.println();
+        System.out.println("Serveis adicionals:");
+        // mostrar els serveis
+        int i = 1;
+        for (String servei : preusServeis.keySet()) {
+            float preu = preusServeis.get(servei);
+            System.out.println("   " + i + ". " + servei + " (" + preu + "€)");
+            i++;
+        }
+        System.out.println("   5. Finalitzar");
+        // demanar servei
+        int opcio = 0;
+        String servei = "";
+        do {
+            System.out.println();
+            System.out.print("Seleccione servei: ");
+            opcio = sc.nextInt();
+            switch (opcio) {
+                case 1:
+                    servei = SERVEI_PISCINA;
+                    break;
+                case 2:
+                    servei = SERVEI_GIMNAS;
+                    break;
+                case 3:
+                    servei = SERVEI_SPA;
+                    break;
+                case 4:
+                    servei = SERVEI_ESMORZAR;
+                    break;
+                case 5:
+                    return serveis;
+                default:
+                    System.out.println("Error: servei no vàlid!!!");
+                    servei = null;
+            }
+            // si el servei es vàlid
+            if (servei != null) {
+                // afegir el servei sols si no es troba en la llista
+                if (serveis.contains(servei)) {
+                    System.out.println("Ja ha afegit " + servei + "!!!");
+                } else {
+                    serveis.add(servei);
+                    System.out.println("Servei afegit: " + servei);
+                }
+            }
+        } while (opcio != 5);
+        // retornar la llista
+        return serveis;
     }
 
     /**
