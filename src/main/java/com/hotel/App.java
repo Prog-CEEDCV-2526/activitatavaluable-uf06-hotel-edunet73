@@ -129,7 +129,7 @@ public class App {
             case 6:
                 break;
             default:
-                System.out.println("Error: opció no vàlida");
+                System.out.println("Opció no vàlida");
         }
     }
 
