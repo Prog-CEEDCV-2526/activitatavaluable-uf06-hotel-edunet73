@@ -57,11 +57,11 @@ public class App {
         int opcio = 0;
         do {
             mostrarMenu();
-            opcio = llegirEnter("Seleccione una opció: ");
+            opcio = llegirEnter("\nSeleccione una opció: ");
             gestionarOpcio(opcio);
         } while (opcio != 6);
 
-        System.out.println("Eixint del sistema... Gràcies per utilitzar el gestor de reserves!");
+        System.out.println("\nEixint del sistema... \nGràcies per utilitzar el gestor de reserves!\n");
     }
 
     // --------- MÈTODES DEMANATS ---------
@@ -97,13 +97,13 @@ public class App {
      * Mostra el menú principal amb les opcions disponibles per a l'usuari.
      */
     public static void mostrarMenu() {
-        System.out.println("\n===== MENÚ PRINCIPAL =====");
-        System.out.println("1. Reservar una habitació");
-        System.out.println("2. Alliberar una habitació");
-        System.out.println("3. Consultar disponibilitat");
-        System.out.println("4. Llistar reserves per tipus");
-        System.out.println("5. Obtindre una reserva");
-        System.out.println("6. Ixir");
+        System.out.println("===== MENÚ PRINCIPAL =====\n");
+        System.out.println("   1. Reservar una habitació");
+        System.out.println("   2. Alliberar una habitació");
+        System.out.println("   3. Consultar disponibilitat");
+        System.out.println("   4. Llistar reserves per tipus");
+        System.out.println("   5. Obtindre una reserva");
+        System.out.println("   6. Ixir");
     }
 
     /**
@@ -129,7 +129,7 @@ public class App {
             case 6:
                 break;
             default:
-                System.out.println("Opció no vàlida");
+                System.out.println("Error: Opció no vàlida!!!");
         }
     }
 
@@ -141,6 +141,7 @@ public class App {
         System.out.println("\n===== RESERVAR HABITACIÓ =====");
         String tipus = seleccionarTipusHabitacioDisponible();
         ArrayList<String> serveis = seleccionarServeis();
+        float preu = calcularPreuTotal(tipus, serveis);
 
 
     }
@@ -153,6 +154,7 @@ public class App {
         System.out.println();
         System.out.print("Seleccione tipus d'habitació: ");
         int numero = sc.nextInt();
+        sc.nextLine(); // netetja el buffer d'entrada
         switch (numero) {
             case 1:
                 return TIPUS_SUITE;
@@ -172,13 +174,14 @@ public class App {
      * habitacions disponibles. En cas contrari, retorna null.
      */
     public static String seleccionarTipusHabitacioDisponible() {
-        System.out.println("\nTipus d'habitació disponibles:");
+        System.out.println("\nTipus d'habitació disponibles");
+        System.out.println("-----------------------------");
         // mostrar disponibilitat
         int contador = 1;
         for (String tipus : disponibilitatHabitacions.keySet()) {
             int disponibles = disponibilitatHabitacions.get(tipus);
             float preu = preusHabitacions.get(tipus);
-            System.out.println("   " + contador + ". " + tipus + " - " + disponibles + " disponibles - " + preu + "€");
+            System.out.printf("   " + contador + ". " + tipus + " (" + disponibles + " disponibles) - %.0f €\n", preu);
             contador ++;
         }
         // demanar tipus d'habitació
@@ -200,53 +203,67 @@ public class App {
      */
     public static ArrayList<String> seleccionarServeis() {
         ArrayList<String> serveis = new ArrayList<>();
-        System.out.println();
-        System.out.println("Serveis adicionals:");
+        System.out.println("\nServeis adicionals");
+        System.out.println("------------------");
         // mostrar els serveis
         int i = 1;
         for (String servei : preusServeis.keySet()) {
             float preu = preusServeis.get(servei);
-            System.out.println("   " + i + ". " + servei + " (" + preu + "€)");
+            System.out.printf("   " + i + ". " + servei + " (%.0f €)\n", preu);
             i++;
         }
-        System.out.println("   5. Finalitzar");
-        // demanar servei
-        int opcio = 0;
-        String servei = "";
+        System.out.println("   -------------");
+        System.out.println("   0. Finalitzar");
+        // oferir serveis
+        String extras = "";
         do {
-            System.out.println();
-            System.out.print("Seleccione servei: ");
-            opcio = sc.nextInt();
-            switch (opcio) {
-                case 1:
-                    servei = SERVEI_PISCINA;
-                    break;
-                case 2:
-                    servei = SERVEI_GIMNAS;
-                    break;
-                case 3:
-                    servei = SERVEI_SPA;
-                    break;
-                case 4:
-                    servei = SERVEI_ESMORZAR;
-                    break;
-                case 5:
-                    return serveis;
-                default:
-                    System.out.println("Error: servei no vàlid!!!");
-                    servei = null;
+            System.out.print("\nVol afegir un servei? (s/n): ");
+            extras = sc.nextLine();
+            if (extras.toLowerCase().equals("s")) {
+                // demanar servei
+                int opcio = 0;
+                String servei = "";
+                do {
+                    System.out.print("\nSeleccione servei: ");
+                    opcio = sc.nextInt();
+                    sc.nextLine(); // netetja el buffer d'entrada
+                    switch (opcio) {
+                        case 1:
+                            servei = SERVEI_PISCINA;
+                            break;
+                        case 2:
+                            servei = SERVEI_GIMNAS;
+                            break;
+                        case 3:
+                            servei = SERVEI_SPA;
+                            break;
+                        case 4:
+                            servei = SERVEI_ESMORZAR;
+                            break;
+                        case 0:
+                            System.out.println("Ha finalitzat la introducció de serveis");
+                            return serveis;
+                        default:
+                            System.out.println("Error: servei no vàlid!!!");
+                            servei = null;
+                    }
+                    // si el servei és vàlid
+                    if (servei != null) {
+                        // afegir-lo sols si no es troba en la llista
+                        if (serveis.contains(servei)) {
+                            System.out.println("Ja ha afegit " + servei + "!!!");
+                        } else {
+                            serveis.add(servei);
+                            System.out.println("Servei afegit: " + servei);
+                        }
+                    }
+                } while (opcio != 0);
+            } else if (extras.toLowerCase().equals("n")) {
+                System.out.println("No ha seleccionat serveis adicionals");
+            } else {
+                System.out.println("Error: resposta no vàlida");
             }
-            // si el servei es vàlid
-            if (servei != null) {
-                // afegir el servei sols si no es troba en la llista
-                if (serveis.contains(servei)) {
-                    System.out.println("Ja ha afegit " + servei + "!!!");
-                } else {
-                    serveis.add(servei);
-                    System.out.println("Servei afegit: " + servei);
-                }
-            }
-        } while (opcio != 5);
+        } while (!extras.toLowerCase().equals("n"));
         // retornar la llista
         return serveis;
     }
@@ -256,8 +273,34 @@ public class App {
      * els serveis seleccionats i l'IVA.
      */
     public static float calcularPreuTotal(String tipusHabitacio, ArrayList<String> serveisSeleccionats) {
-        //TODO:
-        return 0;
+        System.out.println("\nDetall de facturació");
+        System.out.println("---------------------------");
+        // preu de l'habitació
+        float preuHabitacio = preusHabitacions.get(tipusHabitacio);
+        System.out.printf(" - Preu habitació: %.2f €\n", preuHabitacio);
+        // preu dels serveis
+        float preuServeis = 0;
+        System.out.println(" - Serveis:");
+        for (String servei : serveisSeleccionats) {
+            float preuServei = preusServeis.get(servei);
+            System.out.printf("     > " + servei + ": %.2f €\n", preuServei);
+            preuServeis += preuServei;
+        }
+        // subtotal
+        float subtotal = preuHabitacio + preuServeis;
+        System.out.println("---------------------------");
+        System.out.printf(" - Subtotal: %.2f €\n", subtotal);
+        // IVA
+        float preuIVA = IVA * subtotal;
+        System.out.printf(" - IVA (%.0f", IVA * 100);
+        System.out.print("%): ");
+        System.out.printf("%.2f €\n", preuIVA);
+        // total factura
+        float total = subtotal + preuIVA;
+        System.out.println("---------------------------");
+        System.out.printf("            TOTAL: %.2f €\n\n", total);
+        // retornar total
+        return total;
     }
 
     /**
