@@ -142,6 +142,7 @@ public class App {
         String tipus = seleccionarTipusHabitacioDisponible();
         ArrayList<String> serveis = seleccionarServeis();
         float preu = calcularPreuTotal(tipus, serveis);
+        int codi = generarCodiReserva();
 
 
     }
@@ -308,8 +309,13 @@ public class App {
      * (entre 100 i 999) que no estiga repetit.
      */
     public static int generarCodiReserva() {
-        //TODO:
-        return 0;
+        int codi = 0;
+        // generar un codi fins que no estiga contigut en el hashmap de reserves
+        do {
+            codi = (int) (Math.random() * 900) + 100;
+        } while (reserves.containsKey(codi));        
+        // retornar el codi
+        return codi;
     }
 
     /**
