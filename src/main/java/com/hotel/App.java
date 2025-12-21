@@ -179,9 +179,9 @@ public class App {
         sc.nextLine(); // netetja el buffer d'entrada
         switch (numero) {
             case 1:
-                return TIPUS_SUITE;
-            case 2:
                 return TIPUS_ESTANDARD;
+            case 2:
+                return TIPUS_SUITE;
             case 3:
                 return TIPUS_DELUXE;
             default:
@@ -199,13 +199,16 @@ public class App {
         System.out.println("\nTipus d'habitació disponibles");
         System.out.println("-----------------------------");
         // mostrar disponibilitat
-        int contador = 1;
-        for (String tipus : disponibilitatHabitacions.keySet()) {
-            int disponibles = disponibilitatHabitacions.get(tipus);
-            float preu = preusHabitacions.get(tipus);
-            System.out.printf("   " + contador + ". " + tipus + " (" + disponibles + " disponibles) - %.0f €\n", preu);
-            contador ++;
-        }
+        System.out.printf("   1. " + TIPUS_ESTANDARD + " (" + disponibilitatHabitacions.get(TIPUS_ESTANDARD) + " disponibles) - %.0f €\n", preusHabitacions.get(TIPUS_ESTANDARD));
+        System.out.printf("   2. " + TIPUS_SUITE + " (" + disponibilitatHabitacions.get(TIPUS_SUITE) + " disponibles) - %.0f €\n", preusHabitacions.get(TIPUS_SUITE));
+        System.out.printf("   3. " + TIPUS_DELUXE + " (" + disponibilitatHabitacions.get(TIPUS_DELUXE) + " disponibles) - %.0f €\n", preusHabitacions.get(TIPUS_DELUXE));
+        //int contador = 1;
+        //for (String tipus : disponibilitatHabitacions.keySet()) {
+        //    int disponibles = disponibilitatHabitacions.get(tipus);
+        //    float preu = preusHabitacions.get(tipus);
+        //    System.out.printf("   " + contador + ". " + tipus + " (" + disponibles + " disponibles) - %.0f €\n", preu);
+        //    contador ++;
+        //}
         // demanar tipus d'habitació
         String tipus = "";
         do {
