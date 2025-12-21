@@ -129,7 +129,7 @@ public class App {
             case 6:
                 break;
             default:
-                System.out.println("Error: Opció no vàlida!!!");
+                System.out.println("Error: Opció no vàlida!!!\n");
         }
     }
 
@@ -139,12 +139,33 @@ public class App {
      */
     public static void reservarHabitacio() {
         System.out.println("\n===== RESERVAR HABITACIÓ =====");
+        // seleccionar tipus d'habitació
         String tipus = seleccionarTipusHabitacioDisponible();
-        ArrayList<String> serveis = seleccionarServeis();
-        float preu = calcularPreuTotal(tipus, serveis);
-        int codi = generarCodiReserva();
-
-
+        // si hi ha disponibilitat
+        if (tipus != null) {
+            // seleccionar serveis adicionals
+            ArrayList<String> serveis = seleccionarServeis();
+            // calcular preu total
+            float preu = calcularPreuTotal(tipus, serveis);
+            // generar codi de reserva
+            int codi = generarCodiReserva();
+            // --> enregistrar la reserva
+            // crear l'arraylist amb les dades de la reserva
+            ArrayList<String> dadesReserva = new ArrayList<>();
+            // introduir les dades en l'arraylist
+            dadesReserva.add(tipus);
+            dadesReserva.add("" + preu);
+            for (String servei : serveis) {
+                dadesReserva.add(servei);
+            }
+            // introduir el codi i l'arraylist en el hashmap
+            reserves.put(codi, dadesReserva);
+            // mostrar missatge de reserva creada
+            System.out.println("\nReserva creada amb èxit!");
+            System.out.println("Codi de reserva: " + codi + "\n");
+            // actualitzar disponibilitat
+            disponibilitatHabitacions.replace(tipus, disponibilitatHabitacions.get(tipus) - 1);
+        }
     }
 
     /**
@@ -164,7 +185,7 @@ public class App {
             case 3:
                 return TIPUS_DELUXE;
             default:
-                System.out.println("Error: opció no vàlida!!!");
+                System.out.println("Error: Opció no vàlida!!!");
                 return null;
         }
     }
@@ -194,6 +215,8 @@ public class App {
         if (disponibilitatHabitacions.get(tipus) > 0) {
             return tipus;
         } else {
+            System.out.println("\nHo sentim molt!");
+            System.out.println("En aquest moment no tenim disponibilitat del tipus " + tipus + "\n");
             return null;
         }
     }
@@ -245,7 +268,7 @@ public class App {
                             System.out.println("Ha finalitzat la introducció de serveis");
                             return serveis;
                         default:
-                            System.out.println("Error: servei no vàlid!!!");
+                            System.out.println("Error: Servei no vàlid!!!");
                             servei = null;
                     }
                     // si el servei és vàlid
@@ -262,7 +285,7 @@ public class App {
             } else if (extras.toLowerCase().equals("n")) {
                 System.out.println("No ha seleccionat serveis adicionals");
             } else {
-                System.out.println("Error: resposta no vàlida");
+                System.out.println("Error: Resposta no vàlida");
             }
         } while (!extras.toLowerCase().equals("n"));
         // retornar la llista
@@ -281,11 +304,16 @@ public class App {
         System.out.printf(" - Preu habitació: %.2f €\n", preuHabitacio);
         // preu dels serveis
         float preuServeis = 0;
-        System.out.println(" - Serveis:");
-        for (String servei : serveisSeleccionats) {
-            float preuServei = preusServeis.get(servei);
-            System.out.printf("     > " + servei + ": %.2f €\n", preuServei);
-            preuServeis += preuServei;
+        System.out.print(" - Serveis: ");
+        if (!serveisSeleccionats.isEmpty()) {
+            System.out.println();            
+            for (String servei : serveisSeleccionats) {
+                float preuServei = preusServeis.get(servei);
+                System.out.printf("     > " + servei + ": %.2f €\n", preuServei);
+                preuServeis += preuServei;
+            }
+        } else {
+            System.out.printf("%.2f €\n", preuServeis);
         }
         // subtotal
         float subtotal = preuHabitacio + preuServeis;
@@ -299,7 +327,7 @@ public class App {
         // total factura
         float total = subtotal + preuIVA;
         System.out.println("---------------------------");
-        System.out.printf("            TOTAL: %.2f €\n\n", total);
+        System.out.printf("            TOTAL: %.2f €\n", total);
         // retornar total
         return total;
     }
