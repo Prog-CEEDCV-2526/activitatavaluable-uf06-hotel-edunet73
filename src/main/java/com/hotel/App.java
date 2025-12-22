@@ -199,16 +199,12 @@ public class App {
         System.out.println("\nTipus d'habitació disponibles");
         System.out.println("-----------------------------");
         // mostrar disponibilitat
-        System.out.printf("   1. " + TIPUS_ESTANDARD + " (" + disponibilitatHabitacions.get(TIPUS_ESTANDARD) + " disponibles) - %.0f €\n", preusHabitacions.get(TIPUS_ESTANDARD));
-        System.out.printf("   2. " + TIPUS_SUITE + " (" + disponibilitatHabitacions.get(TIPUS_SUITE) + " disponibles) - %.0f €\n", preusHabitacions.get(TIPUS_SUITE));
-        System.out.printf("   3. " + TIPUS_DELUXE + " (" + disponibilitatHabitacions.get(TIPUS_DELUXE) + " disponibles) - %.0f €\n", preusHabitacions.get(TIPUS_DELUXE));
-        //int contador = 1;
-        //for (String tipus : disponibilitatHabitacions.keySet()) {
-        //    int disponibles = disponibilitatHabitacions.get(tipus);
-        //    float preu = preusHabitacions.get(tipus);
-        //    System.out.printf("   " + contador + ". " + tipus + " (" + disponibles + " disponibles) - %.0f €\n", preu);
-        //    contador ++;
-        //}
+        System.out.printf("   1. " + TIPUS_ESTANDARD + " (" + disponibilitatHabitacions.get(TIPUS_ESTANDARD) 
+                                    + " disponibles) - %.0f €\n", preusHabitacions.get(TIPUS_ESTANDARD));
+        System.out.printf("   2. " + TIPUS_SUITE + " (" + disponibilitatHabitacions.get(TIPUS_SUITE) 
+                                    + " disponibles) - %.0f €\n", preusHabitacions.get(TIPUS_SUITE));
+        System.out.printf("   3. " + TIPUS_DELUXE + " (" + disponibilitatHabitacions.get(TIPUS_DELUXE) 
+                                    + " disponibles) - %.0f €\n", preusHabitacions.get(TIPUS_DELUXE));
         // demanar tipus d'habitació
         String tipus = "";
         do {
@@ -354,8 +350,36 @@ public class App {
      * i actualitza la disponibilitat.
      */
     public static void alliberarHabitacio() {
+        if (reserves.isEmpty()) {
+            System.out.println("Actualment l'hotel no té reserves\n");
+            return;
+        }
         System.out.println("\n===== ALLIBERAR HABITACIÓ =====");
-         // TODO: Demanar codi, tornar habitació i eliminar reserva
+        int codi = 0;
+        boolean correcte = false;
+        do {
+            // demanar el codi mentre no siga correcte
+            System.out.print("\nIntrodueix el codi de reserva: ");
+            codi = sc.nextInt();
+            sc.nextLine(); // netetja el buffer d'entrada
+            if (codi >= 100 && codi <= 999 && reserves.containsKey(codi)) {
+                // si el codi es correcte
+                correcte = true;
+                System.out.println("Reserva trobada!");
+                // obtindre el tipus d'habitació
+                ArrayList<String> dades = reserves.get(codi);
+                String tipus = dades.get(0);
+                // eliminar reserva
+                reserves.remove(codi);
+                // actualitzar disponibilitat
+                disponibilitatHabitacions.replace(tipus, disponibilitatHabitacions.get(tipus)+1);
+                // informar de les actuacions realitzades
+                System.out.println("   > Habitació alliberada correctament");
+                System.out.println("   > Disponibilitat actualitzada\n");
+            } else { 
+                System.out.println("Error: Codi de reserva incorrecte!!!");
+            }
+        } while (!correcte);
     }
 
     /**
