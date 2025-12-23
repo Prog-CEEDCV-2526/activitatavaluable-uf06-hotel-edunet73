@@ -386,7 +386,13 @@ public class App {
      * Mostra la disponibilitat actual de les habitacions (lliures i ocupades).
      */
     public static void consultarDisponibilitat() {
-        // TODO: Mostrar lliures i ocupades
+        System.out.println("\n===== DISPONIBILITAT D'HABITACIONS =====\n");
+        System.out.println("Tipus\t\tLliures\tOcupades");
+        System.out.println("-----\t\t-------\t--------");
+        mostrarDisponibilitatTipus(TIPUS_ESTANDARD);
+        mostrarDisponibilitatTipus(TIPUS_SUITE);
+        mostrarDisponibilitatTipus(TIPUS_DELUXE);
+        System.out.println();
     }
 
     /**
