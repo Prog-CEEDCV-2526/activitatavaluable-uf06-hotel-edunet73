@@ -500,6 +500,7 @@ public class App {
         // mostrar informació
         System.out.println("\nDades de la reserva");
         System.out.println("-------------------");
+        System.out.println("Codi: " + codi);
         System.out.println("Tipus d'habitació: " + tipus);
         System.out.println("Serveis adicionals: ");
         if (!serveis.isEmpty()) {
