@@ -121,7 +121,7 @@ public class App {
                 consultarDisponibilitat();
                 break;
             case 4:
-                // llistarReservesPerTipus();
+                obtindreReservaPerTipus();
                 break;
             case 5:
                 obtindreReserva();
@@ -401,8 +401,49 @@ public class App {
      * específic.
      */
     public static void obtindreReservaPerTipus() {
+        if (reserves.isEmpty()) {
+            System.out.println("Actualment l'hotel no té reserves\n");
+            return;
+        }
         System.out.println("\n===== CONSULTAR RESERVES PER TIPUS =====");
-        // TODO: Llistar reserves per tipus
+        System.out.println("\nTipus d'habitació");
+        System.out.println("-----------------");
+        System.out.println("   1. " + TIPUS_ESTANDARD);
+        System.out.println("   2. " + TIPUS_SUITE);
+        System.out.println("   3. " + TIPUS_DELUXE);
+        // demanar tipus d'habitació
+        String tipus = "";
+        do {
+            tipus = seleccionarTipusHabitacio();
+        } while (tipus == null);
+        // obtindre el número d'habitacions ocupades del tipus seleccionat
+        int ocupades = capacitatInicial.get(tipus) - disponibilitatHabitacions.get(tipus);
+        // si hi ha habitacions ocupades d'eixe tipus
+        if (ocupades != 0) {
+            // obtindre array amb els codis de les reserves del tipus seleccionat
+            // la grandària será el número d'habitacions ocupades d'eixe tipus (capacitat
+            // inicial - disponibles)
+            int[] codis = new int[capacitatInicial.get(tipus) - disponibilitatHabitacions.get(tipus)];
+            int index = 0;
+            // per a cada reserva del hashmap de reserves
+            for (int codi : reserves.keySet()) {
+                // obtindre l'arraylist de dades de la reserva
+                ArrayList<String> dades = reserves.get(codi);
+                // obtindre el tipus d'habitació (posició 0 de l'arraylist)
+                String habitacio = dades.get(0);
+                // si coincideix amb el tipus seleccionat, guardar el codi
+                if (habitacio.equals(tipus)) {
+                    codis[index] = codi;
+                    index++;
+                }
+            }
+            // llistar les reserves d'eixe tipus
+            llistarReservesPerTipus(codis, tipus);
+        } else {
+            // si no, informar de l'error i tornar al menú
+            System.out.println("No tenim reserves del tipus " + tipus + "\n");
+            return;
+        }
     }
 
     /**
