@@ -451,7 +451,23 @@ public class App {
      * associades a un tipus d'habitació.
      */
     public static void llistarReservesPerTipus(int[] codis, String tipus) {
-         // TODO: Implementar recursivitat
+        // cas base
+        if (codis.length == 0) {
+            return;
+        }
+        // cas general: obtindre el primer codi
+        int codi = codis[0];
+        // si el codi pertany a una habitació del tipus especificat
+        if (reserves.get(codi).get(0).equals(tipus)) {
+            // mostrar reserva
+            mostrarDadesReserva(codi);
+        }
+        // crear un array de grandària una unitat menor que codis
+        int[] newCodis = new int[codis.length - 1];
+        // eliminar la primera posició de l'array de codis
+        System.arraycopy(codis, 1, newCodis, 0, newCodis.length);
+        // cridada recursiva
+        llistarReservesPerTipus(newCodis, tipus);
     }
 
     /**
