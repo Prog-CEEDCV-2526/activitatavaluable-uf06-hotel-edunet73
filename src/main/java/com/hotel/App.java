@@ -378,6 +378,7 @@ public class App {
                 System.out.println("   > Disponibilitat actualitzada\n");
             } else { 
                 System.out.println("Error: Codi de reserva incorrecte!!!");
+                return;
             }
         } while (!correcte);
     }
@@ -396,6 +397,15 @@ public class App {
     }
 
     /**
+     * Mostra totes les reserves existents per a un tipus d'habitació
+     * específic.
+     */
+    public static void obtindreReservaPerTipus() {
+        System.out.println("\n===== CONSULTAR RESERVES PER TIPUS =====");
+        // TODO: Llistar reserves per tipus
+    }
+
+    /**
      * Funció recursiva. Mostra les dades de totes les reserves
      * associades a un tipus d'habitació.
      */
@@ -407,25 +417,58 @@ public class App {
      * Permet consultar els detalls d'una reserva introduint el codi.
      */
     public static void obtindreReserva() {
+        if (reserves.isEmpty()) {
+            System.out.println("Actualment l'hotel no té reserves\n");
+            return;
+        }
         System.out.println("\n===== CONSULTAR RESERVA =====");
-        // TODO: Mostrar dades d'una reserva concreta
- 
-    }
-
-    /**
-     * Mostra totes les reserves existents per a un tipus d'habitació
-     * específic.
-     */
-    public static void obtindreReservaPerTipus() {
-        System.out.println("\n===== CONSULTAR RESERVES PER TIPUS =====");
-        // TODO: Llistar reserves per tipus
+        int codi = 0;
+        boolean correcte = false;
+        do {
+            // demanar el codi mentre no siga correcte
+            System.out.print("\nIntrodueix el codi de reserva: ");
+            codi = sc.nextInt();
+            sc.nextLine(); // netetja el buffer d'entrada
+            if (codi >= 100 && codi <= 999 && reserves.containsKey(codi)) {
+                correcte = true;
+                mostrarDadesReserva(codi);
+            } else {
+                System.out.println("Error: Codi de reserva incorrecte!!!\n");
+                return;
+            }
+        } while (!correcte); 
     }
 
     /**
      * Consulta i mostra en detall la informació d'una reserva.
      */
     public static void mostrarDadesReserva(int codi) {
-       // TODO: Imprimir tota la informació d'una reserva
+        // obtindre l'arraylist amb les dades de la reserva
+        ArrayList<String> dades = reserves.get(codi);
+        // obtindre tipus d'habitació (posició 0 de l'arraylist)
+        String tipus = dades.get(0);
+        // obtindre el cost (posició 1 de l'arraylist)
+        String cost = dades.get(1);
+        // si s'han contractat, obtindre serveis adicionals (entre les posicions 2 i final)
+        ArrayList<String> serveis = new ArrayList<>();
+        if (dades.size() > 2) {            
+            for (int i = 2; i <= dades.size()-1; i++) {
+                serveis.add(dades.get(i));
+            }
+        }
+        // mostrar informació
+        System.out.println("\nDades de la reserva");
+        System.out.println("-------------------");
+        System.out.println("Tipus d'habitació: " + tipus);
+        System.out.println("Serveis adicionals: ");
+        if (!serveis.isEmpty()) {
+            for (String servei : serveis) {
+                System.out.println("   > " + servei);
+            }
+        } else {
+            System.out.println("   > No s'han contractat serveis");
+        }
+        System.out.println("Cost total: " + cost + " €\n");
     }
 
     // --------- MÈTODES AUXILIARS (PER MILLORAR LEGIBILITAT) ---------
