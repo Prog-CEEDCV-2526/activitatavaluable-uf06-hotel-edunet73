@@ -415,29 +415,22 @@ public class App {
         String tipus = "";
         do {
             tipus = seleccionarTipusHabitacio();
-        } while (tipus == null);
+        } while (tipus == null);        
         // obtindre el número d'habitacions ocupades del tipus seleccionat
         int ocupades = capacitatInicial.get(tipus) - disponibilitatHabitacions.get(tipus);
         // si hi ha habitacions ocupades d'eixe tipus
         if (ocupades != 0) {
-            // obtindre array amb els codis de les reserves del tipus seleccionat
-            // la grandària será el número d'habitacions ocupades d'eixe tipus (capacitat
-            // inicial - disponibles)
-            int[] codis = new int[capacitatInicial.get(tipus) - disponibilitatHabitacions.get(tipus)];
+            // obtindre l'array amb tots el codis de reserva
+            // la grandària serà la mateixa que la del hashmap de reserves
+            int[] codis = new int[reserves.size()];            
             int index = 0;
-            // per a cada reserva del hashmap de reserves
+            // per a cada codi del hashmap de reserves
             for (int codi : reserves.keySet()) {
-                // obtindre l'arraylist de dades de la reserva
-                ArrayList<String> dades = reserves.get(codi);
-                // obtindre el tipus d'habitació (posició 0 de l'arraylist)
-                String habitacio = dades.get(0);
-                // si coincideix amb el tipus seleccionat, guardar el codi
-                if (habitacio.equals(tipus)) {
-                    codis[index] = codi;
-                    index++;
-                }
+                // guardar el codi
+                codis[index] = codi;
+                index++;
             }
-            // llistar les reserves d'eixe tipus
+            // llistar les reserves del tipus seleccionat
             llistarReservesPerTipus(codis, tipus);
         } else {
             // si no, informar de l'error i tornar al menú
