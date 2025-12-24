@@ -173,10 +173,7 @@ public class App {
      * retorna el nom del tipus.
      */
     public static String seleccionarTipusHabitacio() {
-        System.out.println();
-        System.out.print("Seleccione tipus d'habitació: ");
-        int numero = sc.nextInt();
-        sc.nextLine(); // netetja el buffer d'entrada
+        int numero = llegirEnter("\nSeleccione tipus d'habitació: ");
         switch (numero) {
             case 1:
                 return TIPUS_ESTANDARD;
@@ -247,9 +244,7 @@ public class App {
                 int opcio = 0;
                 String servei = "";
                 do {
-                    System.out.print("\nSeleccione servei: ");
-                    opcio = sc.nextInt();
-                    sc.nextLine(); // netetja el buffer d'entrada
+                    opcio = llegirEnter("\nSeleccione servei: ");
                     switch (opcio) {
                         case 1:
                             servei = SERVEI_PISCINA;
@@ -284,7 +279,7 @@ public class App {
             } else if (extras.toLowerCase().equals("n")) {
                 System.out.println("No ha seleccionat serveis adicionals");
             } else {
-                System.out.println("Error: Resposta no vàlida");
+                System.out.println("Error: Entrada incorrecta!!!");
             }
         } while (!extras.toLowerCase().equals("n"));
         // retornar la llista
@@ -359,9 +354,7 @@ public class App {
         boolean correcte = false;
         do {
             // demanar el codi mentre no siga correcte
-            System.out.print("\nIntrodueix el codi de reserva: ");
-            codi = sc.nextInt();
-            sc.nextLine(); // netetja el buffer d'entrada
+            codi = llegirEnter("\nIntrodueix el codi de reserva: ");
             if (codi >= 100 && codi <= 999 && reserves.containsKey(codi)) {
                 // si el codi es correcte
                 correcte = true;
@@ -377,7 +370,7 @@ public class App {
                 System.out.println("   > Habitació alliberada correctament");
                 System.out.println("   > Disponibilitat actualitzada\n");
             } else { 
-                System.out.println("Error: Codi de reserva incorrecte!!!");
+                System.out.println("Error: Codi de reserva incorrecte!!!\n");
                 return;
             }
         } while (!correcte);
@@ -476,9 +469,7 @@ public class App {
         boolean correcte = false;
         do {
             // demanar el codi mentre no siga correcte
-            System.out.print("\nIntrodueix el codi de reserva: ");
-            codi = sc.nextInt();
-            sc.nextLine(); // netetja el buffer d'entrada
+            codi = llegirEnter("\nIntrodueix el codi de reserva: ");
             if (codi >= 100 && codi <= 999 && reserves.containsKey(codi)) {
                 correcte = true;
                 mostrarDadesReserva(codi);
@@ -533,8 +524,13 @@ public class App {
         boolean correcte = false;
         while (!correcte) {
                 System.out.print(missatge);
-                valor = sc.nextInt();
-                correcte = true;
+                if (sc.hasNextInt()) {
+                    valor = sc.nextInt();
+                    correcte = true;
+                } else {
+                    System.out.println("Error: Entrada incorrecta!!!");
+                }
+                sc.nextLine();               
         }
         return valor;
     }
